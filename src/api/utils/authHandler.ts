@@ -2,7 +2,6 @@
 
 /**
  * Handle unauthorized (401) response
- *
  */
 export const handleUnauthorized = (): void => {
   localStorage.removeItem('accessToken')
@@ -10,4 +9,11 @@ export const handleUnauthorized = (): void => {
   if (!window.location.pathname.includes('/login')) {
     window.location.href = '/login'
   }
+}
+
+/**
+ * Get stored access token from localStorage
+ */
+export const getStoredToken = (): string | null => {
+  return localStorage.getItem('accessToken')
 }
