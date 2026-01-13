@@ -1,36 +1,6 @@
-# 📚 HƯỚNG DẪN LUỒNG CODE - Developer Guide
+# 📚 DEVELOPER GUIDE - Eyewear Project
 
-> Tài liệu hướng dẫn chi tiết cách code trong dự án Eyewear.
-> **Cập nhật:** 12/01/2026
-
----
-
-## 🔄 LUỒNG XỬ LÝ
-
-```
-USER ACTION
-    │
-    ▼
-ROUTER (routes/index.tsx)     ← URL → Page
-    │
-    ▼
-PAGE (pages/...)              ← Layout + Feature
-    │
-    ▼
-FEATURE COMPONENT             ← UI Logic
-    │
-    ▼
-HOOK (features/xxx/hooks)     ← React Query + State
-    │
-    ▼
-SERVICE (features/xxx/services) ← Business Logic
-    │
-    ▼
-CLIENT (api/clients)          ← Axios + Auth
-    │
-    ▼
-BACKEND API
-```
+> Hướng dẫn phát triển chi tiết cho team Frontend Developer
 
 ---
 
@@ -38,115 +8,356 @@ BACKEND API
 
 ```
 src/
-├── api/                      # API Layer
-│   ├── clients/              # Axios instances
-│   │   ├── authClient.ts     # Auth APIs
-│   │   └── mainClient.ts     # General APIs
-│   ├── utils/                # Auth handlers
-│   ├── types/                # API types
-│   ├── config.ts             # API_BASE_URL
-│   ├── createApiClient.ts    # Factory
-│   └── endpoints.ts          # All endpoints
+├── lib/                      # ⚙️ Core Configuration
+│   ├── axios.ts              # Axios factory + interceptors
+│   └── react-query.ts        # QueryClient configuration
 │
-├── store/                    # Zustand stores
-│   ├── auth.store.ts
-│   └── cart.store.ts
+├── api/                      # 🌐 API Layer
+│   ├── apiClients.ts         # authClient, mainClient
+│   └── endpoints.ts          # All API endpoints
 │
-├── shared/                   # Code dùng chung
-│   ├── types/                # User, CartItem, ApiResponse
-│   ├── constants/            # Messages
-│   └── hooks/                # Custom hooks
+├── store/                    # 📦 Zustand Stores
+│   ├── auth.store.ts         # Authentication state
+│   └── cart.store.ts         # Shopping cart state
 │
-├── features/                 # Feature modules
+├── shared/                   # 🔗 Shared Resources
+│   ├── components/           # ⭐ UI Component Library
+│   │   └── ui/               # Button, Input, Modal, etc.
+│   ├── constants/            # Messages, UserRole, configs
+│   ├── types/                # User, Product, Cart types
+│   ├── hooks/                # useApiError, etc.
+│   └── utils/                # Helper functions
+│
+├── features/                 # 🎯 Feature Modules
 │   └── [feature]/
-│       ├── components/
+│       ├── components/       # Feature-specific UI
 │       ├── hooks/            # React Query hooks
 │       ├── services/         # API calls
-│       └── types/
+│       ├── types/            # Feature types
+│       └── index.ts          # Barrel export
 │
-├── pages/                    # Page wrappers
-└── routes/                   # Router config
+├── routes/                   # 🛣️ Router
+│   ├── guards/               # AuthGuard, GuestGuard
+│   ├── paths.ts              # Route path constants
+│   └── index.tsx             # Router config (lazy loading)
+│
+├── pages/                    # 📄 Page Components
+│   ├── auth/                 # Login, Register pages
+│   ├── customer/             # Customer pages
+│   └── NotFoundPage.tsx
+│
+└── components/               # Layout Components
+    ├── layout/               # Header, Footer, Sidebar
+    └── common/               # Common components
+```
+
+---
+
+## 🔄 LUỒNG XỬ LÝ
+
+```
+User Action → Router → Page → Feature Component → Hook → Service → API Client → Backend
+                                                    ↓
+                                              React Query Cache
+                                                    ↓
+                                               UI Updates
 ```
 
 ---
 
 ## 📋 API CLIENTS
 
-| Client | Mô tả |
-|--------|-------|
-| `authClient` | Auth APIs (login, register, profile) |
-| `mainClient` | General protected APIs |
+| Client | Base URL | Mô tả |
+|--------|----------|-------|
+| `authClient` | `/auth` | Authentication APIs |
+| `mainClient` | `/api` | General APIs (products, orders, etc.) |
 
-**Config:** `api/config.ts`
 ```typescript
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
+// Import
+import { authClient, mainClient } from '@/api'
+import { ENDPOINTS } from '@/api'
+
+// Usage
+const response = await mainClient.get(ENDPOINTS.PRODUCTS.LIST)
 ```
 
-**Auth Handler:** `api/utils/authHandler.ts`
-- `handleUnauthorized()` - Xóa tokens + redirect /login
+---
+
+## 🛡️ ROUTE GUARDS
+
+| Guard | Mô tả | Redirect |
+|-------|-------|----------|
+| `AuthGuard` | Yêu cầu đăng nhập | → `/login` |
+| `GuestGuard` | Chỉ cho guest | → `/` |
+
+```typescript
+import { AuthGuard, GuestGuard } from '@/routes/guards'
+
+// Protected route
+{ path: '/profile', element: <AuthGuard><ProfilePage /></AuthGuard> }
+
+// Guest only route
+{ path: '/login', element: <GuestGuard><LoginPage /></GuestGuard> }
+```
+
+---
+
+## 🎨 UI COMPONENT LIBRARY
+
+### Available Components
+
+```typescript
+import {
+  // Basic
+  Button,
+  Input,
+  Card,
+  Modal,
+  ConfirmDialog,
+
+  // Feedback
+  Spinner,
+  LoadingOverlay,
+  Badge,
+  OrderStatusBadge,
+
+  // Loading States
+  Skeleton,
+  ProductCardSkeleton,
+
+  // Error Handling
+  ErrorBoundary,
+  PageErrorBoundary
+} from '@/shared/components/ui'
+```
+
+### Button Examples
+
+```typescript
+// Variants: primary, secondary, outline, ghost, danger
+<Button variant="primary" size="lg">Submit</Button>
+<Button variant="danger" isLoading={isPending}>Delete</Button>
+<Button variant="outline" leftIcon={<Icon />}>With Icon</Button>
+```
+
+### Input Examples
+
+```typescript
+<Input
+  label="Email"
+  type="email"
+  error={errors.email?.message}
+  helperText="We'll never share your email"
+/>
+```
+
+### Modal Examples
+
+```typescript
+<Modal
+  isOpen={isOpen}
+  onClose={handleClose}
+  title="Confirm Order"
+  footer={
+    <>
+      <Button variant="outline" onClick={handleClose}>Cancel</Button>
+      <Button onClick={handleConfirm}>Confirm</Button>
+    </>
+  }
+>
+  <p>Are you sure you want to place this order?</p>
+</Modal>
+```
 
 ---
 
 ## 🚀 TẠO FEATURE MỚI
 
-### 1. Types
+### Step 1: Types
+
 ```typescript
 // features/product/types/product.types.ts
 export interface Product {
   id: string
   name: string
   price: number
+  description: string
+  images: string[]
+  category: string
+  stock: number
+}
+
+export interface ProductFilters {
+  category?: string
+  minPrice?: number
+  maxPrice?: number
+  search?: string
 }
 ```
 
-### 2. Endpoint
+### Step 2: Endpoint
+
 ```typescript
 // api/endpoints.ts
-PRODUCT: {
+PRODUCTS: {
   LIST: '/products',
-  DETAIL: (id: string) => `/products/${id}`
+  DETAIL: (id: string) => `/products/${id}`,
+  SEARCH: '/products/search',
+  CATEGORIES: '/products/categories'
 }
 ```
 
-### 3. Service
+### Step 3: Service
+
 ```typescript
 // features/product/services/product.service.ts
-import { mainClient } from '@/api/clients'
-import { ENDPOINTS } from '@/api/endpoints'
+import { mainClient, ENDPOINTS } from '@/api'
+import type { Product, ProductFilters } from '../types'
 
 export const productService = {
-  getAll: () => mainClient.get(ENDPOINTS.PRODUCT.LIST)
+  getAll: (filters?: ProductFilters) =>
+    mainClient.get<Product[]>(ENDPOINTS.PRODUCTS.LIST, { params: filters }),
+
+  getById: (id: string) =>
+    mainClient.get<Product>(ENDPOINTS.PRODUCTS.DETAIL(id)),
+
+  search: (query: string) =>
+    mainClient.get<Product[]>(ENDPOINTS.PRODUCTS.SEARCH, { params: { q: query } })
 }
 ```
 
-### 4. Hook
+### Step 4: Hook
+
 ```typescript
 // features/product/hooks/useProducts.ts
 import { useQuery } from '@tanstack/react-query'
 import { productService } from '../services'
+import type { ProductFilters } from '../types'
 
-export function useProducts() {
+// Query Keys
+export const productKeys = {
+  all: ['products'] as const,
+  lists: () => [...productKeys.all, 'list'] as const,
+  list: (filters: ProductFilters) => [...productKeys.lists(), filters] as const,
+  details: () => [...productKeys.all, 'detail'] as const,
+  detail: (id: string) => [...productKeys.details(), id] as const
+}
+
+// Hooks
+export function useProducts(filters?: ProductFilters) {
   return useQuery({
-    queryKey: ['products'],
-    queryFn: () => productService.getAll()
+    queryKey: productKeys.list(filters || {}),
+    queryFn: () => productService.getAll(filters),
+    staleTime: 5 * 60 * 1000 // 5 minutes
+  })
+}
+
+export function useProduct(id: string) {
+  return useQuery({
+    queryKey: productKeys.detail(id),
+    queryFn: () => productService.getById(id),
+    enabled: !!id
   })
 }
 ```
 
-### 5. Component + Page + Route
+### Step 5: Component
+
+```typescript
+// features/product/components/ProductCard.tsx
+import { Card, Button, Badge } from '@/shared/components/ui'
+import type { Product } from '../types'
+
+interface ProductCardProps {
+  product: Product
+  onAddToCart: (id: string) => void
+}
+
+export function ProductCard({ product, onAddToCart }: ProductCardProps) {
+  return (
+    <Card variant="elevated" padding="none">
+      <img src={product.images[0]} alt={product.name} className="w-full h-48 object-cover" />
+      <div className="p-4">
+        <h3 className="font-semibold">{product.name}</h3>
+        <p className="text-lg font-bold text-blue-600">
+          {product.price.toLocaleString()}đ
+        </p>
+        {product.stock === 0 && <Badge variant="danger">Hết hàng</Badge>}
+        <Button
+          fullWidth
+          onClick={() => onAddToCart(product.id)}
+          disabled={product.stock === 0}
+        >
+          Thêm vào giỏ
+        </Button>
+      </div>
+    </Card>
+  )
+}
+```
+
+### Step 6: Page
+
+```typescript
+// pages/customer/ProductsPage.tsx
+import { useProducts } from '@/features/product'
+import { ProductCard, ProductCardSkeleton } from '@/features/product/components'
+import { useCartStore } from '@/store'
+
+export function ProductsPage() {
+  const { data: products, isLoading, error } = useProducts()
+  const addToCart = useCartStore(state => state.addItem)
+
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-3 gap-4">
+        {[...Array(6)].map((_, i) => <ProductCardSkeleton key={i} />)}
+      </div>
+    )
+  }
+
+  if (error) return <ErrorFallback error={error} />
+
+  return (
+    <div className="grid grid-cols-3 gap-4">
+      {products?.map(product => (
+        <ProductCard
+          key={product.id}
+          product={product}
+          onAddToCart={addToCart}
+        />
+      ))}
+    </div>
+  )
+}
+```
+
+### Step 7: Register Route
+
+```typescript
+// routes/index.tsx
+const ProductsPage = lazy(() => import('@/pages/customer/ProductsPage'))
+
+// Add to router
+{
+  path: '/products',
+  element: <LazyPage><ProductsPage /></LazyPage>
+}
+```
 
 ---
 
 ## ✅ CHECKLIST
 
 ```
-□ 1. Define Types
-□ 2. Add Endpoint
-□ 3. Create Service
-□ 4. Create Hook (React Query)
-□ 5. Create Component
-□ 6. Create Page
-□ 7. Register Route
+□ 1. Define Types          → features/[name]/types/
+□ 2. Add Endpoint          → api/endpoints.ts
+□ 3. Create Service        → features/[name]/services/
+□ 4. Create Hook           → features/[name]/hooks/
+□ 5. Create Component      → features/[name]/components/
+□ 6. Create Page           → pages/
+□ 7. Register Route        → routes/index.tsx
+□ 8. Add to barrel export  → features/[name]/index.ts
 ```
 
 ---
@@ -155,7 +366,56 @@ export function useProducts() {
 
 | ❌ Sai | ✅ Đúng |
 |--------|---------|
-| Hardcode API URL | Import từ `api/config.ts` |
-| Define types inline | Import từ `shared/types/` |
-| Hardcode message | Dùng `ERROR_MESSAGES.XXX` |
+| Hardcode API URL | Import từ `@/api` |
+| Define types inline | Import từ `@/shared/types` hoặc feature types |
+| Hardcode message | Dùng `ERROR_MESSAGES` từ `@/shared/constants` |
 | Call API trong component | Qua Hook → Service → Client |
+| Import cả thư viện | Named import chỉ thứ cần dùng |
+| `console.log` | Dùng `console.warn`, `console.error` chỉ khi cần |
+| Magic numbers/strings | Định nghĩa constants |
+
+---
+
+## 📝 GIT COMMIT CONVENTION
+
+```bash
+# Format
+<type>: <subject>
+
+# Types
+feat:     # Tính năng mới
+fix:      # Sửa bug
+docs:     # Documentation
+style:    # Format code (không thay đổi logic)
+refactor: # Refactor code
+test:     # Thêm tests
+chore:    # Maintenance
+
+# Examples
+git commit -m "feat: add product listing page"
+git commit -m "fix: resolve cart calculation bug"
+git commit -m "refactor: move API logic to service"
+```
+
+---
+
+## 📂 PATH ALIASES
+
+```typescript
+import { useAuth } from '@/features/auth'
+import { UserRole } from '@/shared/types'
+import { ERROR_MESSAGES } from '@/shared/constants'
+import { useAuthStore } from '@/store'
+import { apiClient, ENDPOINTS } from '@/api'
+import { Button, Input, Modal } from '@/shared/components/ui'
+```
+
+---
+
+## 📖 TÀI LIỆU LIÊN QUAN
+
+- [DEVELOPER_HANDOVER.md](./DEVELOPER_HANDOVER.md) - Tài liệu bàn giao chi tiết
+- [LAYOUT_GUIDE.md](./LAYOUT_GUIDE.md) - Wireframes các trang
+- [CODE_STANDARDS.md](./CODE_STANDARDS.md) - Quy chuẩn code
+- [PROJECT_GUIDE.md](./PROJECT_GUIDE.md) - Tổng quan dự án
+

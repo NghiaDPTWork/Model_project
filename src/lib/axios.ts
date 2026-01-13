@@ -1,5 +1,24 @@
+// API Client - Axios instance factory
+import type { ApiClientConfig } from '@/shared/types'
 import axios, { type AxiosInstance } from 'axios'
-import type { ApiClientConfig } from './types'
+
+// ============ Config ============
+
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
+
+// ============ Auth Handlers ============
+
+export const getStoredToken = (): string | null => localStorage.getItem('accessToken')
+
+export const handleUnauthorized = (): void => {
+  localStorage.removeItem('accessToken')
+  localStorage.removeItem('refreshToken')
+  if (!window.location.pathname.includes('/login')) {
+    window.location.href = '/login'
+  }
+}
+
+// ============ Factory ============
 
 export function createApiClient({
   baseURL,

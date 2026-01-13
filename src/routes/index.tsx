@@ -1,19 +1,47 @@
-import { LoginPage } from '@/pages/auth/LoginPage'
-import { HomePage } from '@/pages/customer/HomePage'
-import { NotFoundPage } from '@/pages/NotFoundPage'
+import { LoadingOverlay, PageErrorBoundary } from '@/shared/components/ui'
+import { Suspense, lazy } from 'react'
 import { createBrowserRouter } from 'react-router-dom'
+
+// Lazy load pages for code splitting
+const HomePage = lazy(() => import('@/pages/customer/HomePage').then(m => ({ default: m.HomePage })))
+const LoginPage = lazy(() => import('@/pages/auth/LoginPage').then(m => ({ default: m.LoginPage })))
+const NotFoundPage = lazy(() => import('@/pages/NotFoundPage').then(m => ({ default: m.NotFoundPage })))
+
+// Wrapper component for lazy loaded pages
+function LazyPage({ children }: { children: React.ReactNode }) {
+  return (
+    <PageErrorBoundary>
+      <Suspense fallback={<LoadingOverlay message="Đang tải trang..." />}>
+        {children}
+      </Suspense>
+    </PageErrorBoundary>
+  )
+}
 
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <HomePage />,
+    element: (
+      <LazyPage>
+        <HomePage />
+      </LazyPage>
+    ),
   },
   {
     path: '/login',
-    element: <LoginPage />,
+    element: (
+      <LazyPage>
+        <LoginPage />
+      </LazyPage>
+    ),
   },
   {
     path: '*',
-    element: <NotFoundPage />,
+    element: (
+      <LazyPage>
+        <NotFoundPage />
+      </LazyPage>
+    ),
   },
 ])
+

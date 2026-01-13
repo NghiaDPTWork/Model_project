@@ -1,8 +1,5 @@
-// API Core Types
+// API Types
 import type { AxiosInstance } from 'axios'
-
-// Re-export from shared types for convenience
-export type { ApiResponse } from '@/shared/types'
 
 // API Client Configuration
 export interface ApiClientConfig {
