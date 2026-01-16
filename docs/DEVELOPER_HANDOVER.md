@@ -1,10 +1,5 @@
 # 📦 TÀI LIỆU BÀN GIAO DỰ ÁN - EYEWEAR E-COMMERCE
 
-> **Phiên bản**: 1.0.0
-> **Ngày tạo**: 13/01/2026
-> **Bàn giao cho**: Team Developer Frontend
-> **Người bàn giao**: DevOps Engineer
-
 ---
 
 ## 📋 MỤC LỤC
@@ -30,13 +25,13 @@
 
 **Eyewear E-commerce** là nền tảng thương mại điện tử bán kính mắt với các tính năng:
 
-| Tính Năng | Mô Tả |
-|-----------|-------|
-| 🛒 **E-commerce cơ bản** | Xem sản phẩm, thêm giỏ hàng, thanh toán |
-| 📦 **Pre-order** | Đặt hàng trước cho sản phẩm chưa có sẵn |
-| 👓 **Gia công kính** | Cắt kính theo đơn thuốc của khách hàng |
-| 💳 **Thanh toán** | Tích hợp MoMo, VNPay |
-| 📊 **Quản lý** | Dashboard cho Staff, Operations, Manager, Admin |
+| Tính Năng                | Mô Tả                                           |
+| ------------------------ | ----------------------------------------------- |
+| 🛒 **E-commerce cơ bản** | Xem sản phẩm, thêm giỏ hàng, thanh toán         |
+| 📦 **Pre-order**         | Đặt hàng trước cho sản phẩm chưa có sẵn         |
+| 👓 **Gia công kính**     | Cắt kính theo đơn thuốc của khách hàng          |
+| 💳 **Thanh toán**        | Tích hợp MoMo, VNPay                            |
+| 📊 **Quản lý**           | Dashboard cho Staff, Operations, Manager, Admin |
 
 ### 1.2 User Roles
 
@@ -55,12 +50,14 @@
 ### 1.3 Business Flows
 
 #### Pre-order Flow
+
 ```
 Customer → Chọn sản phẩm Pre-order → Đặt cọc (optional) → Xác nhận Staff
 → Chờ hàng về → Thông báo → Thanh toán → Giao hàng
 ```
 
 #### Gia Công Kính Flow
+
 ```
 Customer → Chọn gọng kính → Nhập thông số đơn thuốc (SPH, CYL, AXIS, PD)
 → Validate thông số → Tính giá tròng → Thanh toán
@@ -109,12 +106,12 @@ Response ← React Query Cache ← Service ← API Response ← Backend
 
 ### 2.3 State Management Strategy
 
-| Loại State | Công Cụ | Ví Dụ |
-|------------|---------|-------|
-| **Server State** | TanStack Query | Products, Orders, User data |
-| **Client State** | Zustand | Auth, Cart, UI preferences |
-| **Form State** | React Hook Form (recommend) | Login form, Checkout form |
-| **URL State** | React Router | Filters, pagination, search |
+| Loại State       | Công Cụ                     | Ví Dụ                       |
+| ---------------- | --------------------------- | --------------------------- |
+| **Server State** | TanStack Query              | Products, Orders, User data |
+| **Client State** | Zustand                     | Auth, Cart, UI preferences  |
+| **Form State**   | React Hook Form (recommend) | Login form, Checkout form   |
+| **URL State**    | React Router                | Filters, pagination, search |
 
 ---
 
@@ -221,26 +218,26 @@ src/
 
 ### 4.1 Core Dependencies
 
-| Package | Version | Purpose |
-|---------|---------|---------|
-| `react` | 19.2.0 | UI Library |
-| `react-dom` | 19.2.0 | React DOM |
-| `react-router-dom` | 7.12.0 | Routing |
+| Package                 | Version | Purpose                 |
+| ----------------------- | ------- | ----------------------- |
+| `react`                 | 19.2.0  | UI Library              |
+| `react-dom`             | 19.2.0  | React DOM               |
+| `react-router-dom`      | 7.12.0  | Routing                 |
 | `@tanstack/react-query` | 5.90.16 | Server state management |
-| `zustand` | 5.0.10 | Client state management |
-| `axios` | 1.13.2 | HTTP client |
+| `zustand`               | 5.0.10  | Client state management |
+| `axios`                 | 1.13.2  | HTTP client             |
 
 ### 4.2 Dev Dependencies
 
-| Package | Version | Purpose |
-|---------|---------|---------|
-| `vite` | 7.2.4 | Build tool |
-| `typescript` | 5.9.3 | Type checking |
-| `eslint` | 9.39.2 | Code linting |
-| `prettier` | 3.7.4 | Code formatting |
-| `husky` | 9.1.7 | Git hooks |
-| `vitest` | 4.0.17 | Unit testing |
-| `tailwindcss` | 4.1.18 | Styling |
+| Package       | Version | Purpose         |
+| ------------- | ------- | --------------- |
+| `vite`        | 7.2.4   | Build tool      |
+| `typescript`  | 5.9.3   | Type checking   |
+| `eslint`      | 9.39.2  | Code linting    |
+| `prettier`    | 3.7.4   | Code formatting |
+| `husky`       | 9.1.7   | Git hooks       |
+| `vitest`      | 4.0.17  | Unit testing    |
+| `tailwindcss` | 4.1.18  | Styling         |
 
 ### 4.3 Path Aliases
 
@@ -288,15 +285,15 @@ VITE_APP_NAME=Eyewear Shop
 
 ### 5.3 NPM Scripts
 
-| Script | Command | Description |
-|--------|---------|-------------|
-| `dev` | `npm run dev` | Start dev server |
-| `build` | `npm run build` | Production build |
-| `lint` | `npm run lint` | Check ESLint |
-| `lint:fix` | `npm run lint:fix` | Fix ESLint errors |
-| `format` | `npm run format` | Format code |
+| Script     | Command            | Description                |
+| ---------- | ------------------ | -------------------------- |
+| `dev`      | `npm run dev`      | Start dev server           |
+| `build`    | `npm run build`    | Production build           |
+| `lint`     | `npm run lint`     | Check ESLint               |
+| `lint:fix` | `npm run lint:fix` | Fix ESLint errors          |
+| `format`   | `npm run format`   | Format code                |
 | `validate` | `npm run validate` | Type-check + Lint + Format |
-| `test` | `npm run test` | Run tests |
+| `test`     | `npm run test`     | Run tests                  |
 
 ### 5.4 Development Workflow
 
@@ -375,11 +372,9 @@ import { ENDPOINTS } from '@/api'
 import type { Product } from '../types'
 
 export const productService = {
-  getAll: () =>
-    mainClient.get<Product[]>(ENDPOINTS.PRODUCTS.LIST),
+  getAll: () => mainClient.get<Product[]>(ENDPOINTS.PRODUCTS.LIST),
 
-  getById: (id: string) =>
-    mainClient.get<Product>(ENDPOINTS.PRODUCTS.DETAIL(id)),
+  getById: (id: string) => mainClient.get<Product>(ENDPOINTS.PRODUCTS.DETAIL(id)),
 
   search: (query: string) =>
     mainClient.get<Product[]>(ENDPOINTS.PRODUCTS.LIST, { params: { q: query } })
@@ -445,19 +440,22 @@ export const useCartStore = create<CartState>((set, get) => ({
   items: [],
   isLoading: false,
 
-  addItem: (item) => set((state) => ({
-    items: [...state.items, item]
-  })),
+  addItem: (item) =>
+    set((state) => ({
+      items: [...state.items, item]
+    })),
 
-  removeItem: (productId) => set((state) => ({
-    items: state.items.filter(i => i.productId !== productId)
-  })),
+  removeItem: (productId) =>
+    set((state) => ({
+      items: state.items.filter((i) => i.productId !== productId)
+    })),
 
-  updateQuantity: (productId, quantity) => set((state) => ({
-    items: state.items.map(item =>
-      item.productId === productId ? { ...item, quantity } : item
-    )
-  })),
+  updateQuantity: (productId, quantity) =>
+    set((state) => ({
+      items: state.items.map((item) =>
+        item.productId === productId ? { ...item, quantity } : item
+      )
+    })),
 
   clearCart: () => set({ items: [] })
 }))
@@ -499,17 +497,17 @@ export function Cart() {
 
 ### 8.1 Available Components
 
-| Component | Import | Description |
-|-----------|--------|-------------|
-| `Button` | `@/shared/components/ui` | Button với variants, sizes, loading |
-| `Input` | `@/shared/components/ui` | Input với label, error, icons |
-| `Card` | `@/shared/components/ui` | Card với header/footer |
-| `Modal` | `@/shared/components/ui` | Modal với accessibility |
-| `ConfirmDialog` | `@/shared/components/ui` | Confirm dialog |
-| `Spinner` | `@/shared/components/ui` | Loading indicator |
-| `Badge` | `@/shared/components/ui` | Badge với variants |
-| `Skeleton` | `@/shared/components/ui` | Loading placeholder |
-| `ErrorBoundary` | `@/shared/components/ui` | Error boundary |
+| Component       | Import                   | Description                         |
+| --------------- | ------------------------ | ----------------------------------- |
+| `Button`        | `@/shared/components/ui` | Button với variants, sizes, loading |
+| `Input`         | `@/shared/components/ui` | Input với label, error, icons       |
+| `Card`          | `@/shared/components/ui` | Card với header/footer              |
+| `Modal`         | `@/shared/components/ui` | Modal với accessibility             |
+| `ConfirmDialog` | `@/shared/components/ui` | Confirm dialog                      |
+| `Spinner`       | `@/shared/components/ui` | Loading indicator                   |
+| `Badge`         | `@/shared/components/ui` | Badge với variants                  |
+| `Skeleton`      | `@/shared/components/ui` | Loading placeholder                 |
+| `ErrorBoundary` | `@/shared/components/ui` | Error boundary                      |
 
 ### 8.2 Usage Examples
 
@@ -557,14 +555,14 @@ import {
 
 ### 9.1 File Naming
 
-| Type | Convention | Example |
-|------|------------|---------|
-| Component | PascalCase | `ProductCard.tsx` |
-| Hook | camelCase with `use` prefix | `useProducts.ts` |
-| Service | camelCase with `.service` | `product.service.ts` |
-| Type | camelCase with `.types` | `product.types.ts` |
-| Store | camelCase with `.store` | `cart.store.ts` |
-| Constant | SCREAMING_SNAKE_CASE | `ERROR_MESSAGES` |
+| Type      | Convention                  | Example              |
+| --------- | --------------------------- | -------------------- |
+| Component | PascalCase                  | `ProductCard.tsx`    |
+| Hook      | camelCase with `use` prefix | `useProducts.ts`     |
+| Service   | camelCase with `.service`   | `product.service.ts` |
+| Type      | camelCase with `.types`     | `product.types.ts`   |
+| Store     | camelCase with `.store`     | `cart.store.ts`      |
+| Constant  | SCREAMING_SNAKE_CASE        | `ERROR_MESSAGES`     |
 
 ### 9.2 Component Structure
 
@@ -618,13 +616,13 @@ import type { Product } from './types'
 
 ### 9.4 Không Được Làm
 
-| ❌ Sai | ✅ Đúng |
-|--------|---------|
-| Hardcode API URL | Import từ `@/api` |
-| Define types inline | Import từ `@/shared/types` |
-| Hardcode messages | Dùng `ERROR_MESSAGES` từ `@/shared/constants` |
-| Call API trong component | Qua Hook → Service → Client |
-| Import cả thư viện | Named import chỉ cần dùng |
+| ❌ Sai                   | ✅ Đúng                                       |
+| ------------------------ | --------------------------------------------- |
+| Hardcode API URL         | Import từ `@/api`                             |
+| Define types inline      | Import từ `@/shared/types`                    |
+| Hardcode messages        | Dùng `ERROR_MESSAGES` từ `@/shared/constants` |
+| Call API trong component | Qua Hook → Service → Client                   |
+| Import cả thư viện       | Named import chỉ cần dùng                     |
 
 ---
 
@@ -720,6 +718,7 @@ VITE_APP_NAME=Eyewear Shop
 Frontend và Backend cần thống nhất:
 
 1. **Response Format**
+
 ```typescript
 interface ApiResponse<T> {
   data: T
@@ -729,6 +728,7 @@ interface ApiResponse<T> {
 ```
 
 2. **Error Format**
+
 ```typescript
 interface ApiError {
   code: string
@@ -752,8 +752,8 @@ interface ApiError {
 // POST /prescription/validate
 interface PrescriptionRequest {
   rightEye: {
-    sph: number  // -20.00 to +20.00
-    cyl: number  // -6.00 to +6.00
+    sph: number // -20.00 to +20.00
+    cyl: number // -6.00 to +6.00
     axis: number // 1 to 180
   }
   leftEye: {
